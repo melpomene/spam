@@ -88,9 +88,13 @@ def spam_prob(comment, word_spamrisk_map):
     return reduce(operator.mul, [i[1] / (i[1] + reduce(operator.mul, [1 - i[1] for i in sort_cost_list])) for i in sort_cost_list])
 
 
-def print_wc(wc, length):
-    for wp in sorted(wc.items(), key=lambda x: -x[1])[:length]:
-        print wp
+def print_wc(wc, length=0):
+    if length == 0: 
+        for wp in sorted(wc.items(), key=lambda x: -x[1]):
+            print wp
+    else:
+        for wp in sorted(wc.items(), key=lambda x: -x[1])[:length]:
+            print wp
 
 if __name__ == "__main__":
     c = connect()
@@ -102,7 +106,7 @@ if __name__ == "__main__":
     not_spam_wc = word_nbr_map(not_spam_wordlist)
     total_wc = word_nbr_map(spam_wordlist + not_spam_wordlist)
     word_spamrisk_map = spamrisk_map(spam_wc, not_spam_wc, total_wc)
-    #print_wc(word_spamrisk_map, 100)
+    #print_wc(word_spamrisk_map)
 
     if len(sys.argv) > 1:
         print spam_prob(sys.argv[1], word_spamrisk_map)
